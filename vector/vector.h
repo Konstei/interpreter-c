@@ -13,7 +13,7 @@ Vector_##type *vectorCreate_##type(unsigned int initialSize, type *initialElemen
   for (unsigned int i=0; i<initialSize; i++) v->data[i] = initialElements[i]; \
   return v; \
 } \
-void vectorInsert_##type(Vector_##type *v, type element) { \
+void vectorPush_##type(Vector_##type *v, type element) { \
   v->size++; \
   v->bytesize += sizeof(type); \
   v->data = realloc(v->data, v->bytesize); \
@@ -26,7 +26,7 @@ void vectorFree_##type(Vector_##type *v) { \
 
 #define Vector(type) Vector_##type
 #define vectorCreate(type, initialSize, initialElements) vectorCreate_##type(initialSize, initialElements)
-#define vectorInsert(type, vector, element) vectorInsert_##type(vector, element)
+#define vectorPush(type, vector, element) vectorPush_##type(vector, element)
 #define vectorFree(type, vector) vectorFree_##type(vector)
 
 // #define COMPARE_TYPES(type1, type2) _Generic((type1), type2: 1, default: 0)
