@@ -12,3 +12,9 @@ typedef struct {
     StackMemory stack;
     HeapMemory heap;
 } Memory;
+
+
+Memory *memoryCreate();
+
+
+void memoryFree(Memory *memory);

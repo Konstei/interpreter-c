@@ -10,16 +10,11 @@ String *stringCreate(char *str) {
     return string;
 }
 
-void stringAssign(String *string, char *str) {
-    string->length = strlen(str);
-    string->str = realloc(string->str, string->length + 1);
-    strcpy(string->str, str);
-}
-
-void stringAppend(String *string, char *str) {
+String *stringAppend(String *string, char *str) {
     string->length += strlen(str);
     string->str = realloc(string->str, string->length + 1);
     strcat(string->str, str);
+    return string;
 }
 
 void stringFree(String *string) {
