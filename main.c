@@ -3,6 +3,7 @@
 #include <string.h>
 #include "string/string.h"
 #include "vector/vector.h"
+#include "interpreter/lexer.h"
 #include "memory/memory.h"
 
 

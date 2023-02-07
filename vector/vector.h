@@ -6,17 +6,17 @@
   type *data; \
 } Vector_##type; \
 Vector_##type *vectorCreate_##type(unsigned int initialSize, type *initialElements) { \
-  Vector_##type *v = malloc(sizeof(Vector_##type)); \
+  Vector_##type *v = (Vector_##type*)malloc(sizeof(Vector_##type)); \
   v->size = initialSize; \
   v->bytesize = initialSize * sizeof(type); \
-  v->data = malloc(v->bytesize); \
+  v->data = (##type*)malloc(v->bytesize); \
   for (unsigned int i=0; i<initialSize; i++) v->data[i] = initialElements[i]; \
   return v; \
 } \
 void vectorPush_##type(Vector_##type *v, type element) { \
   v->size++; \
   v->bytesize += sizeof(type); \
-  v->data = realloc(v->data, v->bytesize); \
+  v->data = (##type*)realloc(v->data, v->bytesize); \
   v->data[v->size-1] = element; \
 } \
 void vectorFree_##type(Vector_##type *v) { \
