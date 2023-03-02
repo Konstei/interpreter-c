@@ -20,7 +20,7 @@ private:
 }
 */
 
-fn int sqare(int n) {
+fn int square(int n) {
     return n*n;
 }
 

@@ -1,13 +1,14 @@
 #include "memory.h"
+#include <stdlib.h>
 
 Memory *memoryCreate() {
-    Memory *memory = calloc(sizeof(Memory));
-    memory->stack = (StackMemory){
+    Memory *memory = malloc(sizeof(Memory));
+    memory->stack = (StackMemory) {
         1048576,
         0,
         malloc(1048576)
     };
-    memory->heap = (HeapMemory){
+    memory->heap = (HeapMemory) {
         4194304,
         0,
         malloc(4194304)

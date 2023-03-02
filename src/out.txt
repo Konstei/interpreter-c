@@ -2,22 +2,7 @@
 import fs from "fs";
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+d
 
 fn int sqare(int n) {
     return n*n;
