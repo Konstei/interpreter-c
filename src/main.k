@@ -40,3 +40,5 @@ mosmc/*//*/
 test_end
 
 a
+/*/
+b

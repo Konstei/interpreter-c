@@ -11,7 +11,7 @@ DECLARE_VECTOR(String);
 
 /**
  * @brief Creates, initializes a String and returns a pointer to it
- * @param initialString The initial string
+ * @param str The initial string
  * @return String* 
  */
 
@@ -28,6 +28,7 @@ String *stringAppend(String *string, char *str);
 /**
  * @brief Frees the heap allocated space for the String pointer and it's fields'
  * @param string Pointer to the String variable to be deallocated
+ * @return void
  */
 void stringFree(String *string);
 
@@ -44,6 +45,7 @@ String *stringSlice(String *string, unsigned int start, unsigned int end);
  * @brief Splits the string into a Vector of Strings
  * @param string Pointer to the String variable to be split
  * @param separator The delimiter to split the string by as a string
+ * @return Vector(String)*
  */
 Vector(String) *stringSplit(String *string, char *separator);
 
@@ -77,6 +79,6 @@ unsigned long long stringCount(String *string, char *str, unsigned long long sta
  * @brief Removes leading and trailing whitespaces
  * @param str Specifies the string from which the whitespaces to be removed
  * @param direction Specifies the direction from which whitespaces to be removed (-1 for leading, 1 for trailing, default for both)
- * @return Returns the trimmed string
+ * @return String*
  */
 String *stringTrim(String *str, int direction);

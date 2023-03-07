@@ -2,7 +2,23 @@
 import fs from "fs";
 
 
-d
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 fn int sqare(int n) {
     return n*n;
@@ -24,3 +40,5 @@ mosmc
 test_end
 
 a
+
+b
