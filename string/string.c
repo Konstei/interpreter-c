@@ -64,9 +64,8 @@ String *stringJoin(Vector(String) *v, char *separator) {
     return string;
 }
 
-long long stringFind(String *string, char *str, unsigned long long start) {
-    unsigned long long str_len = strlen(str);
-    for (unsigned long long i = start; i < string->length - str_len + 1; i++) {
+long long stringFind(String *string, char *str, unsigned long long start, unsigned long long end) {
+    for (unsigned long long i=start; i<end; i++) {
         if (!strncmp(string->str+i, str, strlen(str))) return i;
     }
     return -1;
@@ -96,4 +95,13 @@ String *stringTrim(String *str, int direction) {
     }
     printf("Invalid direction for trim function");
     exit(EXIT_FAILURE);
+}
+
+String *stringReverse(String *string) {
+    char temp[string->length+1];
+    for (unsigned long long i=string->length-1; i>=0; i--) {
+        temp[string->length - i - 1] = string->str[i];
+    }
+    temp[string->length] = '\0';
+    return stringCreate(temp);
 }

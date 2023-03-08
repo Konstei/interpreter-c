@@ -61,9 +61,10 @@ String *stringJoin(Vector(String) *v, char *separator);
  * @param string Pointer to the String variable to be searched in
  * @param str The substring to be searched for
  * @param start The starting index of the search
+ * @param end The ending index of the search
  * @return long long 
  */
-long long stringFind(String *string, char *str, unsigned long long start);
+long long stringFind(String *string, char *str, unsigned long long start, unsigned long long end);
 
 /**
  * @brief Returns the number of occurences of the specified substring in the string
@@ -82,3 +83,10 @@ unsigned long long stringCount(String *string, char *str, unsigned long long sta
  * @return String*
  */
 String *stringTrim(String *str, int direction);
+
+/**
+ * @brief Returns a new String with the characters in the original String reversed
+ * @param string Pointer to the String variable to be reversed
+ * @return String* 
+ */
+String *stringReverse(String *string);
