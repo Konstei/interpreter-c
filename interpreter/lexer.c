@@ -7,7 +7,7 @@
 String *commentsDelete(String *code) {
     if (code->length == 0) return code;
     String *newCode = stringCreate("");
-    int lineNumber = 1;
+    unsigned long long lineNumber = 1;
     int line = 0;
     int block = 0;
     unsigned int op = 0;
@@ -26,7 +26,7 @@ String *commentsDelete(String *code) {
                 block = 0;
                 i += 3;
             } else {
-                printf("SyntaxError: Unbalanced comments, expected to find a '/*' to match the '*/' token\n");
+                printf("ERROR: at %s:%llu\nSyntaxError: Stray token, expected to find a '/*' to match the '*/' token\n", "main.k", lineNumber);
                 exit(EXIT_FAILURE);
             }
         } else if (code->str[i] == '/' && code->str[i+1] == '/' && !block) {
@@ -49,7 +49,12 @@ String *commentsDelete(String *code) {
         newCode = stringAppend(newCode, sChar);
     }
     if (block) {
-        printf("SyntaxError: Unbalanced comments, expected to find a '*/' to match the '/*' token\n");
+        unsigned long long newLines = 0;
+        for (unsigned int i=code->length-1; i>0; i--) {
+            if (code->str[i-1] == '/' && code->str[i] == '*') break;
+            if (code->str[i] == '\n') newLines++;
+        }
+        printf("ERROR: at %s:%llu\nSyntaxError: Unterminated comment, expected to find a '*/' to match the '/*' token\n", "main.k", stringCount(newCode, "\n", 0, newCode->length) - newLines + 1);
         exit(EXIT_FAILURE);
     }
     return newCode;

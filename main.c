@@ -22,6 +22,7 @@ int main(int argc, char *argv[]) {
             printf("Could not open file: '%s'\n", argv[1]);
             exit(EXIT_FAILURE);
         }
+        // String *text = stringCreate("// test file to see if everything is working\nimport fs from \"fs\";\n\n/*\nclass Parent {\npublic:\n    Parent(string name, int age) {\n        this:name = name;\n        this:age = age;\n    }\n    ~Parent() = default;\n\n    static fn int get() {\n        return rand();\n    }\n\nprivate:\n    string name;\n    int age;\n}\n*/\n\nfn int sqare(int n) {\n    return n*n;\n}\n\nfn void main() {\n    // Parent p(\"John\", 23);\n    // print(\"%d\", Parent::get());\n    \n}\n\n\ntest_begin\nmo/*\nsmc//*/\nmos/*//\nmc*/\nmosmc/*//*/\ntest_end\n\na\n/**/\nb");
         String *text = stringCreate("// test file to see if everything is working\nimport fs from \"fs\";\n\n/*\nclass Parent {\npublic:\n    Parent(string name, int age) {\n        this:name = name;\n        this:age = age;\n    }\n    ~Parent() = default;\n\n    static fn int get() {\n        return rand();\n    }\n\nprivate:\n    string name;\n    int age;\n}\n*/\n\nfn int sqare(int n) {\n    return n*n;\n}\n\nfn void main() {\n    // Parent p(\"John\", 23);\n    // print(\"%d\", Parent::get());\n    \n}\n\n\ntest_begin\nmo/*\nsmc//*/\nmos/*//\nmc*/\nmosmc/*//*/\ntest_end\n\na\n/**/\nb");
         String *code = commentsDelete(text);
         FILE *f = fopen("src/out.txt", "w");
