@@ -25,6 +25,7 @@
         "regex.h": "c",
         "unistd.h": "c",
         "memory.h": "c",
-        "sstream": "c"
+        "sstream": "c",
+        "initializer_list": "c"
     }
 }

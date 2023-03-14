@@ -41,13 +41,13 @@ String *stringSlice(String *string, unsigned int start, unsigned int end) {
 }
 
 Vector(String) *stringSplit(String *string, char *separator) {
-    Vector(String) *v = vectorCreate(String, 0, NULL);
+    Vector(String) *v = vectorCreate(String)(0, NULL);
     String *stringCopy = stringCreate(string->str);
     String *temp = stringCreate("");
     char *token = strtok(stringCopy->str, separator);
     while (token != NULL) {
         temp = stringCreate(token);
-        vectorPush(String, v, *temp);
+        vectorPush(String)(v, *temp);
         token = strtok(NULL, separator);
     }
     stringFree(temp);
@@ -57,7 +57,7 @@ Vector(String) *stringSplit(String *string, char *separator) {
 
 String *stringJoin(Vector(String) *v, char *separator) {
     String *string = stringCreate(v->data[0].str);
-    for (unsigned int i=1; i<v->length; i++) {
+    for (unsigned int i=1; i<v->size; i++) {
         stringAppend(string, separator);
         stringAppend(string, v->data[i].str);
     }
