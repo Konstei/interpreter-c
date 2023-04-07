@@ -1,4 +1,5 @@
+.vscode
+temp
+script.c
 script
-script.txt
-
-.vscode/
+tasklist.yaml

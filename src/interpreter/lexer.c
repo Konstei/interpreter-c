@@ -1,7 +1,7 @@
 #include "lexer.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "../vector/vector.h"
+#include "../containers/vector.h"
 #include "../string/string.h"
 
 String *commentsDelete(String *code) {
