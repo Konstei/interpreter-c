@@ -35,9 +35,7 @@ int main(int argc, char *argv[]) {
             }
         }
         dest_file_path[strlen(dest_file_path)-1] = 't';
-        strcat(dest_file_path, "xt\0");
-        // there's some fuckery going on here and it's 2am, i don't have the anything to fix this
-        // it's easy but im not making another string concatenator just for this, my soul is shattered enough already
+        strcat(dest_file_path, "xt");
         FILE *dest_file = fopen(dest_file_path, "w");
         fprintf(dest_file, "%s", code->str);
         // fseek(file, 0, SEEK_END);

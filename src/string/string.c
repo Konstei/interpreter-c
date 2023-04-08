@@ -14,7 +14,7 @@ String *stringCreate(char *str) {
 }
 
 String *stringAppend(String *string, char *str) {
-    int newLength = string->length + strlen(str);
+    unsigned long long newLength = string->length + strlen(str);
     char temp[newLength + 1];
     strcpy(temp, string->str);
     strcat(temp, str);
@@ -28,11 +28,11 @@ void stringFree(String *string) {
 }
 
 // this function gives weird stuff
-String *stringSlice(String *string, unsigned int start, unsigned int end) {
+String *stringSlice(String *string, unsigned long long start, unsigned long long end) {
     if (end - start <= 0) {
         return stringCreate("");
     }
-    int newLength = end - start;
+    unsigned long long newLength = end - start;
     char temp[newLength + 1];
     strncpy(temp, string->str + start, newLength);
     temp[newLength] = '\0';
@@ -57,7 +57,7 @@ Vector(String) *stringSplit(String *string, char *separator) {
 
 String *stringJoin(Vector(String) *v, char *separator) {
     String *string = stringCreate(v->data[0].str);
-    for (unsigned int i=1; i<v->size; i++) {
+    for (unsigned long long i=1; i<v->length; i++) {
         stringAppend(string, separator);
         stringAppend(string, v->data[i].str);
     }

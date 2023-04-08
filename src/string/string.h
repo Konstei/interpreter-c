@@ -39,7 +39,7 @@ void stringFree(String *string);
  * @param end Ending index of the slice
  * @return String*
  */
-String *stringSlice(String *string, unsigned int start, unsigned int end);
+String *stringSlice(String *string, unsigned long long start, unsigned long long end);
 
 /**
  * @brief Splits the string into a Vector of Strings

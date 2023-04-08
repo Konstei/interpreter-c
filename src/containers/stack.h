@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #define DECLARE_STACK(type) typedef struct { \
-  unsigned long long size; \
+  unsigned long long length; \
   unsigned long long bytesize; \
   type *data; \
 } Stack_##type; \
@@ -16,20 +16,20 @@ void stackFree_##type(Stack_##type *v);
 #define DEFINE_STACK(type) \
 Stack_##type *stackCreate_##type() { \
   Stack_##type *s = (Stack_##type*)malloc(sizeof(Stack_##type)); \
-  s->size = 0; \
+  s->length = 0; \
   s->bytesize = 0; \
   s->data = NULL; \
   return s; \
 } \
 void stackPush_##type(Stack_##type *s, type element) { \
-  s->size++; \
+  s->length++; \
   s->bytesize += sizeof(type); \
   s->data = (type*)realloc(s->data, s->bytesize); \
   s->data[s->length-1] = element; \
 } \
 type stackPop_##type(Stack_##type *s) { \
   type element = s->data[s->length-1]; \
-  s->size--; \
+  s->length--; \
   s->bytesize -= sizeof(type); \
   s->data = (type*)realloc(s->data, s->bytesize); \
   return element; \

@@ -8,12 +8,12 @@ String *commentsDelete(String *code) {
     if (code->length == 0) return code;
     String *newCode = stringCreate("");
     unsigned long long lineNumber = 1;
-    int line = 0;
-    int block = 0;
-    unsigned int op = 0;
+    short line = 0;
+    short block = 0;
+    unsigned long long op = 0;
     if (code->str[0] == '/' && code->str[1] == '/') line = 1;
     else if (code->str[0] == '/' && code->str[1] == '*') block = 1;
-    for (unsigned int i=(line > block ? line : block)+1; i<code->length; i++) {
+    for (unsigned long long i=(line > block ? line : block)+1; i<code->length; i++) {
         if (code->str[i] == '/' && code->str[i+1] == '*' && code->str[i-1] != '/' && !line) {
             char sChar[2] = {code->str[i-1], '\0'};
             newCode = stringAppend(newCode, sChar);
@@ -50,7 +50,7 @@ String *commentsDelete(String *code) {
     }
     if (block) {
         unsigned long long newLines = 0;
-        for (unsigned int i=code->length-1; i>0; i--) {
+        for (unsigned long long i=code->length-1; i>0; i--) {
             if (code->str[i-1] == '/' && code->str[i] == '*') break;
             if (code->str[i] == '\n') newLines++;
         }

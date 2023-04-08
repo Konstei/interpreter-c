@@ -6,12 +6,12 @@ Memory *memoryCreate() {
     memory->stack = (StackMemory) {
         1048576,
         0,
-        malloc(1048576)
+        (byte*)malloc(1048576)   // too much?
     };
     memory->heap = (HeapMemory) {
         4194304,
         0,
-        malloc(4194304)
+        (byte*)malloc(4194304)   // too much?
     };
     return memory;
 }

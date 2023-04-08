@@ -13,8 +13,14 @@ typedef struct {
     HeapMemory heap;
 } Memory;
 
-
+/**
+ * @brief 
+ * @return Memory* 
+ */
 Memory *memoryCreate();
 
-
+/**
+ * @brief 
+ * @param memory
+ */
 void memoryFree(Memory *memory);
