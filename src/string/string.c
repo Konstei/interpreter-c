@@ -6,9 +6,9 @@
 DEFINE_VECTOR(String);
 
 String *stringCreate(char *str) {
-    String *string = malloc(sizeof(String));
+    String *string = (String*)malloc(sizeof(String));
     string->length = strlen(str);
-    string->str = malloc(string->length + 1);
+    string->str = (char*)malloc(string->length + 1);
     strcpy(string->str, str);
     return string;
 }

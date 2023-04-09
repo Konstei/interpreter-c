@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 Memory *memoryCreate() {
-    Memory *memory = malloc(sizeof(Memory));
+    Memory *memory = (Memory*)malloc(sizeof(Memory));
     memory->stack = (StackMemory) {
         1048576,
         0,
