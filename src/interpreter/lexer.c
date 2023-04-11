@@ -7,6 +7,7 @@
 String *commentsDelete(String *code) {
     if (code->length == 0) return code;
     String *newCode = stringCreate("");
+    String *temp = newCode;
     unsigned long long lineNumber = 1;
     short line = 0;
     short block = 0;
@@ -17,12 +18,18 @@ String *commentsDelete(String *code) {
         if (code->str[i] == '/' && code->str[i+1] == '*' && code->str[i-1] != '/' && !line) {
             char sChar[2] = {code->str[i-1], '\0'};
             newCode = stringAppend(newCode, sChar);
+            stringFree(temp);
+            temp = newCode;
             block = 1;
             op = i;
             i++;
         } else if (code->str[i] == '*' && code->str[i+1] == '/' && op != i-1 && !line) {
             if (block) {
-                if (code->str[i-1] == '\n') newCode = stringAppend(newCode, "\n");
+                if (code->str[i-1] == '\n') {
+                    newCode = stringAppend(newCode, "\n");
+                    stringFree(temp);
+                    temp = newCode;
+                }
                 block = 0;
                 i += 3;
             } else {
@@ -32,12 +39,16 @@ String *commentsDelete(String *code) {
         } else if (code->str[i] == '/' && code->str[i+1] == '/' && !block) {
             char sChar[2] = {code->str[i-1], '\0'};
             newCode = stringAppend(newCode, sChar);
+            stringFree(temp);
+            temp = newCode;
             line = 1;
             i++;
         }
         if (!block && !line || code->str[i-1] == '\n') {
             char sChar[2] = {code->str[i-1], '\0'};
             newCode = stringAppend(newCode, sChar);
+            stringFree(temp);
+            temp = newCode;
         }
         if (line && code->str[i] == '\n') {
             line = 0;
@@ -47,6 +58,8 @@ String *commentsDelete(String *code) {
     if (!block && !line || code->str[code->length-1] == '\n') {
         char sChar[2] = {code->str[code->length-1], '\0'};
         newCode = stringAppend(newCode, sChar);
+        stringFree(temp);
+        temp = newCode;
     }
     if (block) {
         unsigned long long newLines = 0;

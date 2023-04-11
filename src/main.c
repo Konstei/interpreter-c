@@ -38,7 +38,8 @@ int main(int argc, char *argv[]) {
         strcat(dest_file_path, "xt");
         FILE *dest_file = fopen(dest_file_path, "w");
         fprintf(dest_file, "%s", code->str);
-        // fseek(file, 0, SEEK_END);
+        stringFree(text);
+        stringFree(code);
         fclose(dest_file);
     }
     fclose(src_file);

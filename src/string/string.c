@@ -46,6 +46,7 @@ Vector(String) *stringSplit(String *string, char *separator) {
     String *temp = stringCreate("");
     char *token = strtok(stringCopy->str, separator);
     while (token != NULL) {
+        stringFree(temp);
         temp = stringCreate(token);
         vectorPush(String)(v, *temp);
         token = strtok(NULL, separator);
@@ -57,9 +58,14 @@ Vector(String) *stringSplit(String *string, char *separator) {
 
 String *stringJoin(Vector(String) *v, char *separator) {
     String *string = stringCreate(v->data[0].str);
+    String *temp = string;
     for (unsigned long long i=1; i<v->length; i++) {
-        stringAppend(string, separator);
-        stringAppend(string, v->data[i].str);
+        string = stringAppend(string, separator);
+        stringFree(temp);
+        temp = string;
+        string = stringAppend(string, v->data[i].str);
+        stringFree(temp);
+        temp = string;
     }
     return string;
 }
@@ -81,16 +87,24 @@ unsigned long long stringCount(String *string, char *str, unsigned long long sta
     return count;
 }
 
-String *stringTrim(String *str, int direction) {
-    if (str->length == 0) return str;
-    String *slice;
-    *slice = *str;
+String *stringTrim(String *string, int direction) {
+    if (string->length == 0) return string;
+    String *slice = stringCreate(string->str);
+    String *temp = slice;
     if (direction == -1) {
-        while (slice->str[0] == ' ') slice = stringSlice(slice, 1, slice->length);
+        while (slice->str[0] == ' ') {
+            slice = stringSlice(slice, 1, slice->length);
+            stringFree(temp);
+            temp = slice;
+        }
         return slice;
     }
     if (direction == 1) {
-        while (slice->str[-1] == ' ') slice = stringSlice(slice, 0, slice->length-1);
+        while (slice->str[-1] == ' ') {
+            slice = stringSlice(slice, 0, slice->length-1);
+            stringFree(temp);
+            temp = slice;
+        }
         return slice;
     }
     printf("Invalid direction for trim function");
