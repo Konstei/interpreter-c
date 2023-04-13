@@ -1,4 +1,4 @@
-
+"// test file to see if everything is working"
 import fs from "fs";
 
 
@@ -27,12 +27,12 @@ fn int sqare(int n) {
 fn void main() {
     
     
-    
-}
+    "\"
 
 
-test_begin
-mo
+
+
+o
 
 mos
 

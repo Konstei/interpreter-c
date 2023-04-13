@@ -27,7 +27,7 @@ fn int square(int n) {
 fn void main() {
     // Parent p("John", 23);
     // print("%d", Parent::get());
-    
+    "\"/*\"";
 }
 
 

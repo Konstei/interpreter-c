@@ -12,9 +12,31 @@ String *commentsDelete(String *code) {
     short line = 0;
     short block = 0;
     unsigned long long op = 0;
+    short inString = 0;
+    char stringType = '\0';
     if (code->str[0] == '/' && code->str[1] == '/') line = 1;
     else if (code->str[0] == '/' && code->str[1] == '*') block = 1;
-    for (unsigned long long i=(line > block ? line : block)+1; i<code->length; i++) {
+    else if (code->str[0] == '"' || code->str[0] == '\'') {
+        stringType = code->str[0];
+        inString = 1;
+    }
+    for (unsigned long long i = (inString ? inString : (line > block ? line : block)+1); i<code->length; i++) {
+        if (!line && !block) {
+            if (stringType == '\0' && (code->str[i] == '"' || code->str[i] == '\'')) {
+                stringType = code->str[i];
+                inString = 1;
+            } else if (inString && code->str[i] == stringType) {
+                stringType = '\0';
+                inString = 0;
+            }
+            if (inString) {
+                char sChar[2] = {code->str[i-1], '\0'};
+                newCode = stringAppend(newCode, sChar);
+                stringFree(temp);
+                temp = newCode;
+                continue;
+            }
+        }
         if (code->str[i] == '/' && code->str[i+1] == '*' && code->str[i-1] != '/' && !line) {
             char sChar[2] = {code->str[i-1], '\0'};
             newCode = stringAppend(newCode, sChar);
