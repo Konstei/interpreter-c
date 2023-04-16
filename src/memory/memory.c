@@ -2,16 +2,16 @@
 #include <stdlib.h>
 
 Memory *memoryCreate() {
-    Memory *memory = (Memory*)malloc(sizeof(Memory));
+    Memory *memory = malloc(sizeof(Memory));
     memory->stack = (StackMemory) {
         1048576,
         0,
-        (byte*)malloc(1048576)   // too much?
+        malloc(1048576)   // too much?
     };
     memory->heap = (HeapMemory) {
         4194304,
         0,
-        (byte*)malloc(4194304)   // too much?
+        malloc(4194304)   // too much?
     };
     return memory;
 }

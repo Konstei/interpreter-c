@@ -15,7 +15,7 @@ void stackFree_##type(Stack_##type *v);
 
 #define DEFINE_STACK(type) \
 Stack_##type *stackCreate_##type() { \
-  Stack_##type *s = (Stack_##type*)malloc(sizeof(Stack_##type)); \
+  Stack_##type *s = malloc(sizeof(Stack_##type)); \
   s->length = 0; \
   s->bytesize = 0; \
   s->data = NULL; \
@@ -24,14 +24,14 @@ Stack_##type *stackCreate_##type() { \
 void stackPush_##type(Stack_##type *s, type element) { \
   s->length++; \
   s->bytesize += sizeof(type); \
-  s->data = (type*)realloc(s->data, s->bytesize); \
+  s->data = realloc(s->data, s->bytesize); \
   s->data[s->length-1] = element; \
 } \
 type stackPop_##type(Stack_##type *s) { \
   type element = s->data[s->length-1]; \
   s->length--; \
   s->bytesize -= sizeof(type); \
-  s->data = (type*)realloc(s->data, s->bytesize); \
+  s->data = realloc(s->data, s->bytesize); \
   return element; \
 } \
 type stackPeek_##type(Stack_##type *s) { \

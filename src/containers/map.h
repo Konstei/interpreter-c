@@ -5,29 +5,29 @@
 
 #define DECLARE_MAP(keytype, valuetype) typedef struct { \
   unsigned long long length; \
-  unsigned long long bytesize; \
+  unsigned long long keybytesize; \
+  unsigned long long valuebytesize; \
   keytype *keys; \
   valuetype *values; \
 } Map_##keytype##_##valuetype; \
-DECLARE_VECTOR(keytype); \
-DECLARE_VECTOR(valuetype); \
-Map_##keytype##_##valuetype *mapCreate_##keytype##_##valuetype(unsigned long long initialSize, keytype *keys, valuetype *values, int (*compare)(keytype*, keytype*)); \
+Map_##keytype##_##valuetype *mapCreate_##keytype##_##valuetype(unsigned long long initialSize, keytype *keys, valuetype *values); \
 void mapSet_##keytype##_##valuetype(Map_##keytype##_##valuetype *m, keytype key, valuetype value); \
-valuetype mapGet_##keytype##_##valuetype(Map_##keytype##_##valuetype *m, keytype key); \
+valuetype mapGet_##keytype##_##valuetype(Map_##keytype##_##valuetype *m, keytype key, valuetype fallback); \
 int mapHas_##keytype##_##valuetype(Map_##keytype##_##valuetype *m, keytype key); \
 Vector(keytype) *mapKeys_##keytype##_##valuetype(Map_##keytype##_##valuetype *m); \
 Vector(valuetype) *mapValues_##keytype##_##valuetype(Map_##keytype##_##valuetype *m); \
 void mapFree_##keytype##_##valuetype(Map_##keytype##_##valuetype *m);
 
-#define DEFINE_MAP(keytype, valuetype) \
-Map_##keytype##_##valuetype *mapCreate_##keytype##_##valuetype(unsigned long long initialSize, keytype *keys, valuetype *values, int (*compare)(keytype, keytype)) { \
-  Map_##keytype##_##valuetype *m = (Map_##keytype##_##valuetype*)malloc(sizeof(Map_##keytype##_##valuetype)); \
+#define DEFINE_MAP(keytype, valuetype, compare) \
+Map_##keytype##_##valuetype *mapCreate_##keytype##_##valuetype(unsigned long long initialSize, keytype *keys, valuetype *values) { \
+  Map_##keytype##_##valuetype *m = malloc(sizeof(Map_##keytype##_##valuetype)); \
   m->length = initialSize; \
-  m->bytesize = initialSize * sizeof(keytype) + initialSize * sizeof(valuetype); \
-  m->keys = (keytype*)malloc(initialSize * sizeof(keytype)); \
-  m->values = (valuetype*)malloc(initialSize * sizeof(valuetype)); \
-  memcpy(m->keys, keys, initialSize * sizeof(keytype)); \
-  memcpy(m->values, values, initialSize * sizeof(valuetype)); \
+  m->keybytesize = initialSize * sizeof(keytype); \
+  m->valuebytesize = initialSize * sizeof(valuetype); \
+  m->keys = malloc(m->keybytesize); \
+  m->values = malloc(m->valuebytesize); \
+  memcpy(m->keys, keys, m->keybytesize); \
+  memcpy(m->values, values, m->valuebytesize); \
   unsigned long long currSize, leftStart, mid, rightEnd, i, j, k, n1, n2; \
   for (currSize = 1; currSize < initialSize; currSize *= 2) { \
     for (leftStart = 0; leftStart < initialSize-1; leftStart += 2*currSize) { \
@@ -73,30 +73,73 @@ Map_##keytype##_##valuetype *mapCreate_##keytype##_##valuetype(unsigned long lon
   return m; \
 } \
 void mapSet_##keytype##_##valuetype(Map_##keytype##_##valuetype *m, keytype key, valuetype value) { \
-  for (unsigned long long i=0; i<m->length; i++) { \
-    if (m->keys[i] == key) { \
-      m->values[i] = value; \
+  unsigned long long l = 0, r = m->length-1, mid, t; \
+  while (l <= r) { \
+    mid = (l+r)/2; \
+    if (compare(m->keys[l], key) == 0) { \
+      m->values[l] = value; \
       return; \
     } \
+    if (compare(m->keys[mid], key) == 0) { \
+      m->values[mid] = value; \
+      return; \
+    } \
+    if (compare(m->keys[r], key) == 0) { \
+      m->values[r] = value; \
+      return; \
+    } \
+    if (compare(m->keys[mid], key) < 0) { \
+      l = mid+1; \
+      r--; \
+    } else { \
+      r = mid-1; \
+      l++; \
+    } \
+    t = mid; \
   } \
+  while (t < m->length && compare(m->keys[t], key) < 0) t++; \
   m->length++; \
-  m->bytesize += sizeof(keytype) + sizeof(valuetype); \
-  m->keys = (keytype*)realloc(m->keys, m->bytesize); \
-  m->values = (valuetype*)realloc(m->values, m->bytesize); \
-  m->keys[m->length-1] = key; \
-  m->values[m->length-1] = value; \
-} \
-valuetype mapGet_##keytype##_##valuetype(Map_##keytype##_##valuetype *m, keytype key) { \
-  for (unsigned long long i=0; i<m->length; i++) { \
-    if (m->keys[i] == key) return m->values[i]; \
+  m->keybytesize += sizeof(keytype); \
+  m->valuebytesize += sizeof(valuetype); \
+  m->keys = realloc(m->keys, m->keybytesize); \
+  m->values = realloc(m->values, m->valuebytesize); \
+  for (unsigned long long i=m->length-1; i>t; i--) { \
+    m->keys[i] = m->keys[i-1]; \
+    m->values[i] = m->values[i-1]; \
   } \
-  return (valuetype)NULL; \
+  m->keys[t] = key; \
+  m->values[t] = value; \
+} \
+valuetype mapGet_##keytype##_##valuetype(Map_##keytype##_##valuetype *m, keytype key, valuetype fallback) { \
+  unsigned long long l = 0, r = m->length-1, mid; \
+  while (l <= r) { \
+    mid = (l+r)/2; \
+    if (compare(m->keys[l], key) == 0) return m->values[l]; \
+    if (compare(m->keys[mid], key) == 0) return m->values[mid]; \
+    if (compare(m->keys[r], key) == 0) return m->values[r]; \
+    if (compare(m->keys[mid], key) < 0) { \
+      l = mid+1; \
+      r--; \
+    } else { \
+      r = mid-1; \
+      l++; \
+    } \
+  } \
+  return fallback; \
 } \
 int mapHas_##keytype##_##valuetype(Map_##keytype##_##valuetype *m, keytype key) { \
-  for (unsigned long long i=0; i<m->length; i++) { \
-    if (m->keys[i] == key) return 1; \
+  unsigned long long l = 0, r = m->length-1, mid; \
+  while (l <= r) { \
+    mid = (l+r)/2; \
+    if (compare(m->keys[l], key) == 0 || compare(m->keys[mid], key) == 0 || compare(m->keys[r], key) == 0) return 1; \
+    if (compare(m->keys[mid], key) < 0) { \
+      l = mid+1; \
+      r--; \
+    } else { \
+      r = mid-1; \
+      l++; \
+    } \
   } \
-  return 0; \
 } \
 Vector(keytype) *mapKeys_##keytype##_##valuetype(Map_##keytype##_##valuetype *m) { \
   Vector(keytype) *v = vectorCreate(keytype)(m->length, m->keys); \

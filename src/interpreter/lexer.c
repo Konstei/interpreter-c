@@ -25,7 +25,7 @@ String *commentsDelete(String *code) {
             if (stringType == '\0' && (code->str[i] == '"' || code->str[i] == '\'')) {
                 stringType = code->str[i];
                 inString = 1;
-            } else if (inString && code->str[i] == stringType) {
+            } else if (inString && code->str[i] == stringType && code->str[i-1] != '\\') {
                 stringType = '\0';
                 inString = 0;
             }

@@ -14,17 +14,17 @@ Vector_##type *vectorSlice_##type(Vector_##type *v, unsigned long long start, un
 
 #define DEFINE_VECTOR(type) \
 Vector_##type *vectorCreate_##type(unsigned long long initialSize, type *initialElements) { \
-  Vector_##type *v = (Vector_##type*)malloc(sizeof(Vector_##type)); \
+  Vector_##type *v = malloc(sizeof(Vector_##type)); \
   v->length = initialSize; \
   v->bytesize = initialSize * sizeof(type); \
-  v->data = (type*)malloc(v->bytesize); \
+  v->data = malloc(v->bytesize); \
   for (unsigned long long i=0; i<initialSize; i++) v->data[i] = initialElements[i]; \
   return v; \
 } \
 void vectorPush_##type(Vector_##type *v, type element) { \
   v->length++; \
   v->bytesize += sizeof(type); \
-  v->data = (type*)realloc(v->data, v->bytesize); \
+  v->data = realloc(v->data, v->bytesize); \
   v->data[v->length-1] = element; \
 } \
 void vectorFree_##type(Vector_##type *v) { \
@@ -32,10 +32,10 @@ void vectorFree_##type(Vector_##type *v) { \
   free(v); \
 } \
 Vector_##type *vectorSlice_##type(Vector_##type *v, unsigned long long start, unsigned long long end) { \
-  Vector_##type *slice = (Vector_##type*)malloc(sizeof(Vector_##type)); \
+  Vector_##type *slice = malloc(sizeof(Vector_##type)); \
   slice->length = end - start; \
   slice->bytesize = slice->length * sizeof(type); \
-  slice->data = (type*)malloc(slice->bytesize); \
+  slice->data = malloc(slice->bytesize); \
   for (unsigned long long i=0; i<slice->length; i++) slice->data[i] = v->data[start + i]; \
   return slice; \
 }
