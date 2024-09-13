@@ -1,1 +1,1 @@
-# interpreter-cpp
+# interpreter-c
